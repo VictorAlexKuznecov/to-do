@@ -152,14 +152,14 @@ toggleTheme.addEventListener("click", () => {
   application.classList.toggle("dark");
   if (application.classList.contains("dark")) {
     imageTheme.src = "./image/theme/sun.svg";
-    main.style.backgroundImage = 'url("../image/black-background.jpg")';
+    main.style.backgroundImage = "url('../to-do/image/black-background.jpg')";
     main.style.backgroundRepeat = "no-repeat";
     main.style.backgroundPosition = "center";
     main.style.backgroundSize = "cover";
     main.style.transition = "all ease 1s";
   } else {
     imageTheme.src = "./image/theme/moon.png";
-    main.style.backgroundImage = 'url("../image/background.jpg")';
+    main.style.backgroundImage = 'url("../to-do/image/background.jpg")';
     main.style.backgroundRepeat = "no-repeat";
     main.style.backgroundPosition = "center";
     main.style.backgroundSize = "cover";
@@ -224,7 +224,7 @@ btnLogin.addEventListener("click", (event) => {
   ) {
     wrapper.style.opacity = "0";
     application.style.display = "block";
-    main.style.backgroundImage = 'url("../image/background.jpg")';
+    main.style.backgroundImage = 'url("../to-do/image/background.jpg")';
   }
 });
 hidePasswordIcon.addEventListener("click", () => {
