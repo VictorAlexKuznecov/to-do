@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>To-do list</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Rubik&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Rubik:wght@600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./style/normalize.css" />
+    <link rel="stylesheet" href="./style/style.css" />
+  </head>
+  <body>
+    <main class="main">
+      <div class="app">
+        <div class="app__description">
+          <div class="app__img">
+            <img class="image" src="./image/Ellipse 9.jpeg" alt="#" />
+          </div>
+          <p class="app__greetings">Good evening, Ivy</p>
+          <div class="app__theme">
+            <img class="img__theme" src="./image/theme/moon.png" alt="#" />
+          </div>
+        </div>
+        <div class="app__body">
+          <input
+            class="app__search"
+            id="search"
+            type="text"
+            placeholder="Search"
+          />
+          <img
+            class="app__search-icon"
+            src="./image/search.svg"
+            alt="icon_search"
+          />
+          <button class="app__add-button" type="button">
+            <img class="app__add-svg" src="./image/add.svg" alt="add-button" />
+          </button>
+        </div>
+        <div class="app__buttons buttons">
+          <button class="button__delete-all button-controls" type="button">
+            Delete All
+          </button>
+          <button class="button__delete-last button-controls" type="button">
+            Delete Last
+          </button>
+          <button class="button__show-all button-controls" type="button">
+            Show All
+          </button>
+          <button class="button__show-completed button-controls" type="button">
+            Show Completed
+          </button>
+        </div>
+        <div class="description__notes">
+          <span class="app__number-notes"
+            >All: <span class="app__number">0</span></span
+          >
+          <span class="app__number-completed"
+            >Completed: <span class="app__completed">0</span></span
+          >
+        </div>
+        <h2 class="app__title">Today’s tasks</h2>
+        <ul class="app__list"></ul>
+      </div>
+      <div class="wrapper">
+        <div class="btn-close">
+          <span class="close"></span>
+        </div>
+        <div class="form-box login">
+          <h2 class="title">Login</h2>
+          <form action="#">
+            <div class="input-box">
+              <span class="icon icon-email"></span>
+              <input class="input input-email-login" type="text" required />
+              <label class="label label-email">Email</label>
+            </div>
+            <div class="input-box">
+              <span class="icon icon-eye"></span>
+              <span class="icon icon-password"></span>
+              <input
+                class="input input-password-login"
+                type="password"
+                required
+              />
+              <label class="label label-password">Password</label>
+            </div>
+            <div class="remember">
+              <label class="remember__label">
+                <input class="input__checkbox" type="checkbox" />Remember me
+              </label>
+              <a href="#" class="remember__link">Forgot Password?</a>
+            </div>
+            <button class="btn btn-login" type="submit">Login</button>
+            <div class="login-register">
+              <p class="text-login">
+                Don't have an account?
+                <a href="#" class="register__link">Register</a>
+              </p>
+            </div>
+          </form>
+        </div>
+        <div class="form-box register">
+          <h2 class="title title-registration">Registration</h2>
+          <form action="#">
+            <div class="input-box">
+              <span class="icon icon-user"></span>
+              <input class="input input-user" type="text" required />
+              <label class="label label-user">Username</label>
+            </div>
+            <div class="input-box">
+              <span class="icon icon-email"></span>
+              <input class="input input-email-register" type="text" required />
+              <label class="label label-email">Email</label>
+            </div>
+            <div class="input-box">
+              <span class="icon icon-password"></span>
+              <input
+                class="input input-password-register"
+                type="password"
+                required
+              />
+              <label class="label label-password">Password</label>
+            </div>
+
+            <button class="btn btn-register" type="submit">Register</button>
+            <div class="login-register">
+              <p class="text-login">
+                Already have an account?
+                <a href="#" class="login__link">Login</a>
+              </p>
+            </div>
+          </form>
+        </div>
+      </div>
+    </main>
+
+    <script src="./js/main.js"></script>
+  </body>
+</html>
