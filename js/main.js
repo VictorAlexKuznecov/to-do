@@ -181,6 +181,9 @@ const closeModal = document.querySelector(".btn-close"),
   btnRegister = document.querySelector(".btn-register"),
   registerLink = document.querySelector(".register__link"),
   hidePasswordIcon = document.querySelector(".icon-eye"),
+  hidePasswordIconRegister = document.querySelector(".icon-eye-register"),
+  passwordMessage = document.querySelector(".register__message"),
+  strength = document.querySelector(".strength"),
   loginLink = document.querySelector(".login__link");
 let users = [];
 
@@ -233,5 +236,34 @@ hidePasswordIcon.addEventListener("click", () => {
     userPasswordLogin.attributes.type.value = "text";
   } else {
     userPasswordLogin.attributes.type.value = "password";
+  }
+});
+hidePasswordIconRegister.addEventListener("click", () => {
+  hidePasswordIconRegister.classList.toggle("visible");
+  if (hidePasswordIconRegister.classList.contains("visible")) {
+    userPassword.attributes.type.value = "text";
+  } else {
+    userPassword.attributes.type.value = "password";
+  }
+});
+userPassword.addEventListener("input", () => {
+  if (userPassword.value.length > 0) {
+    passwordMessage.style.display = "block";
+  } else {
+    passwordMessage.style.display = "none";
+    userPassword.style.borderBottom = "2px solid #162938";
+  }
+  if (userPassword.value.length > 0 && userPassword.value.length <= 4) {
+    passwordMessage.style.color = "red";
+    userPassword.style.borderBottom = "2px solid red";
+    strength.innerHTML = "weak";
+  } else if (userPassword.value.length > 4 && userPassword.value.length < 8) {
+    passwordMessage.style.color = "orange";
+    userPassword.style.borderBottom = "2px solid orange";
+    strength.innerHTML = "medium";
+  } else if (userPassword.value.length >= 8) {
+    passwordMessage.style.color = "green";
+    userPassword.style.borderBottom = "2px solid green";
+    strength.innerHTML = "strong";
   }
 });
