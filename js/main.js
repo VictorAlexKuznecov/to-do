@@ -10,11 +10,17 @@ const add = document.body.querySelector(".app__add-button"),
   completedNotes = document.querySelector(".app__completed"),
   deleteNote = document.querySelector(".item__delete"),
   searchIcon = document.querySelector(".app__search-icon"),
-  toggleTheme = document.querySelector(".app__theme"),
+  toggleThemeCheckbox = document.querySelector(".checkbox__theme"),
   imageTheme = document.querySelector(".img__theme"),
   main = document.querySelector(".main"),
+  appBody = document.querySelector(".app__body"),
+  textMessageIncorrect = document.querySelector(".text-message-incorrect"),
+  editButtons = document.querySelector(".app__buttons-edit"),
+  btnSave = document.querySelector(".button-save"),
+  btnCancel = document.querySelector(".button-cancel"),
   application = document.querySelector(".app");
 
+let currentTime, taskDeadline, editingNumber;
 let toDo = [];
 function setDate(arr) {
   localStorage.setItem("todos", JSON.stringify(arr));
@@ -28,6 +34,7 @@ function getDate() {
   }
 }
 getDate();
+
 // возвращает время
 function formatDate(date) {
   const day = date.getDate();
@@ -39,40 +46,86 @@ function formatDate(date) {
     second < 10 ? "0" + second : second
   } ${day} ${month}`;
 }
+
 function updateListWithNewNote() {
   list.innerHTML = "";
   let note = {
     message: searchInput.value,
     checked: false,
     date: formatDate(new Date()),
+    dateNow: Date.now(),
+    isVisible: true,
   };
   toDo.push(note);
   setDate(toDo);
   searchInput.value = "";
-  getMessage(toDo);
   amountOfElements.textContent = toDo.length;
+  filterChecked(toDo);
+  getMessage(toDo);
+  removeButtonAfterDelay(toDo);
 }
-// click to add
-add.addEventListener("click", () => {
-  updateListWithNewNote();
-});
+// удаление кнопки edit
+function removeButtonAfterDelay(arr) {
+  arr.forEach((item) => {
+    currentTime = item.dateNow;
+    taskDeadline = currentTime + 30000;
+    setTimeout(() => {
+      item.isVisible = false;
+      list.innerHTML = "";
+      getMessage(toDo);
+    }, taskDeadline - currentTime);
+    clearTimeout();
+  });
+}
+
 // по нажатию enter
 searchInput.addEventListener("keypress", (event) => {
   if (event.key === "Enter") {
+    if (searchInput.value.length < 4) {
+      textMessageIncorrect.style.display = "block";
+      searchInput.value = "";
+    } else {
+      updateListWithNewNote();
+    }
+  }
+});
+
+// убирает сообщение о некоректности введеных значений
+searchInput.addEventListener("click", () => {
+  if (textMessageIncorrect.style.display === "block") {
+    textMessageIncorrect.style.display = "none";
+  }
+});
+// click to add
+add.addEventListener("click", () => {
+  if (searchInput.value.length < 4) {
+    textMessageIncorrect.style.display = "block";
+    searchInput.value = "";
+  } else {
+    list.innerHTML = "";
     updateListWithNewNote();
   }
 });
+
 function createListItem(item, index) {
   return `
-    <li class="app__item ${item.checked ? "active" : ""}">
-      <input class="item__checkbox" type="checkbox" data-index=${index} ${
+    <li class="app__item ${
+      item.checked ? "active" : ""
+    }" draggable="true" data-identifier=${index}>
+    <input class="item__checkbox" type="checkbox" data-index=${index} ${
     item.checked ? "checked" : ""
   }/>
+    <span class="item__checkbox-custom"></span>
+    <div class = "item__content">
       <span class="item__text">${item.message}</span>
       <span class="item__date">${item.date}</span>
-      <img class="item__delete" src="./image/delete.svg" data-indication=${index} alt="icon-delete" />
+    </div>
+    <img class="item__editing ${
+      item.isVisible ? "" : "hidden"
+    }" src="./image/edit.svg" data-editing=${index} alt="icon-editing" />
+    <img class="item__delete" src="./image/delete.svg" data-indication=${index} alt="icon-delete" />
     </li>
-  `;
+    `;
 }
 // выводит сообщения
 function getMessage(arr) {
@@ -80,9 +133,17 @@ function getMessage(arr) {
     list.insertAdjacentHTML("beforeend", createListItem(item, index));
   });
 }
+
 // выводит список выполненых дел
 function updateCheckedItemCount() {
   completedNotes.innerHTML = toDo.filter((item) => item.checked).length;
+}
+// выполненные дела в конец списка
+function filterChecked(arr) {
+  arr.sort((a, b) => {
+    return Number(a.checked) - Number(b.checked);
+  });
+  return arr;
 }
 // клик по списку дел
 list.addEventListener("click", (event) => {
@@ -91,8 +152,9 @@ list.addEventListener("click", (event) => {
     toDo[indicator].checked = !toDo[indicator].checked;
     list.innerHTML = "";
     updateCheckedItemCount();
-    getMessage(toDo);
     setDate(toDo);
+    filterChecked(toDo);
+    getMessage(toDo);
   }
   if (event.target.classList.contains("item__delete")) {
     const index = Number(event.target.dataset.indication);
@@ -103,7 +165,56 @@ list.addEventListener("click", (event) => {
     getMessage(toDo);
     setDate(toDo);
   }
+  if (event.target.classList.contains("item__editing")) {
+    editingNumber = Number(event.target.dataset.editing);
+    searchInput.value = toDo[editingNumber].message;
+    searchInput.focus();
+    editButtons.style.display = "block";
+  }
 });
+/* ----------------------- dragDrop---------------------------------- */
+list.addEventListener("mousedown", () => {
+  const items = document.querySelectorAll(".app__item");
+  let dragStartIndex;
+  const dragOver = function (event) {
+    event.preventDefault();
+  };
+  const dragStart = function () {
+    dragStartIndex = Number(this.dataset.identifier);
+  };
+  const dragDrop = function () {
+    const dragDropIndex = Number(this.dataset.identifier);
+    let deleteElement = toDo.splice(dragStartIndex, 1);
+    toDo.splice(dragDropIndex, 0, ...deleteElement);
+    list.innerHTML = "";
+    getMessage(toDo);
+    setDate(toDo);
+  };
+  items.forEach((elem) => {
+    elem.addEventListener("dragover", dragOver);
+    elem.addEventListener("dragstart", dragStart);
+    elem.addEventListener("drop", dragDrop);
+  });
+});
+
+// click по кнопке сохранить
+btnSave.addEventListener("click", () => {
+  toDo[editingNumber].message = searchInput.value;
+  toDo[editingNumber].date = formatDate(new Date());
+  editButtons.style.display = "none";
+  searchInput.value = "";
+  list.innerHTML = "";
+  updateCheckedItemCount();
+  getMessage(toDo);
+  setDate(toDo);
+});
+
+// click по кнопке отменить
+btnCancel.addEventListener("click", () => {
+  editButtons.style.display = "none";
+  searchInput.value = "";
+});
+
 // клик по выполненым делам
 showCompleted.addEventListener("click", () => {
   list.innerHTML = "";
@@ -114,11 +225,13 @@ showCompleted.addEventListener("click", () => {
   completedNotes.innerHTML = completedArr.length;
   setDate(completedArr);
 });
+
 showAll.addEventListener("click", () => {
   list.innerHTML = "";
   getMessage(toDo);
   setDate(toDo);
 });
+
 deleteLast.addEventListener("click", () => {
   list.innerHTML = "";
   toDo.pop();
@@ -127,6 +240,7 @@ deleteLast.addEventListener("click", () => {
   amountOfElements.textContent = toDo.length;
   updateCheckedItemCount();
 });
+
 deleteAll.addEventListener("click", () => {
   list.innerHTML = "";
   completedNotes.innerHTML = 0;
@@ -134,6 +248,7 @@ deleteAll.addEventListener("click", () => {
   setDate(toDo);
   amountOfElements.textContent = toDo.length;
 });
+
 searchIcon.addEventListener("click", () => {
   list.innerHTML = "";
 
@@ -148,24 +263,19 @@ searchIcon.addEventListener("click", () => {
 });
 
 // переключение темы
-toggleTheme.addEventListener("click", () => {
-  application.classList.toggle("dark");
-  if (application.classList.contains("dark")) {
+toggleThemeCheckbox.addEventListener("click", () => {
+  main.classList.toggle("dark");
+  if (main.classList.contains("dark")) {
     imageTheme.src = "./image/theme/sun.svg";
-    main.style.backgroundImage = "url('../to-do/image/black-background.jpg')";
-    main.style.backgroundRepeat = "no-repeat";
-    main.style.backgroundPosition = "center";
-    main.style.backgroundSize = "cover";
-    main.style.transition = "all ease 1s";
+    application.style.background = "rgba(0, 0, 0, 0.96)";
+    main.style.backgroundImage = 'url("../to-do/image/black-background.jpg")';
   } else {
-    imageTheme.src = "./image/theme/moon.png";
     main.style.backgroundImage = 'url("../to-do/image/background.jpg")';
-    main.style.backgroundRepeat = "no-repeat";
-    main.style.backgroundPosition = "center";
-    main.style.backgroundSize = "cover";
-    main.style.transition = "all ease 1s";
+    imageTheme.src = "./image/theme/moon.png";
+    application.style.background = "rgba(255, 253, 244, 0.96)";
   }
 });
+
 /* login */
 const closeModal = document.querySelector(".btn-close"),
   loginModal = document.querySelector(".login"),
@@ -184,6 +294,7 @@ const closeModal = document.querySelector(".btn-close"),
   hidePasswordIconRegister = document.querySelector(".icon-eye-register"),
   passwordMessage = document.querySelector(".register__message"),
   strength = document.querySelector(".strength"),
+  userGreeting = document.querySelector(".user-name"),
   loginLink = document.querySelector(".login__link");
 let users = [];
 
@@ -204,28 +315,49 @@ loginLink.addEventListener("click", () => {
 
 btnRegister.addEventListener("click", (event) => {
   event.preventDefault();
-  person = {
-    user: userName.value,
-    email: userEmail.value,
-    password: userPassword.value,
-  };
-  users.push(person);
-  recordUser(users);
-  userPassword.value = "";
-  userEmail.value = "";
-  userName.value = "";
-  loginModal.style.opacity = "1";
-  registerModal.style.transform = "translateX(420px)";
+  let emailValue = userEmail.value;
+  const regexp = /\@/;
+  if (
+    emailValue.match(regexp) &&
+    userPassword.value.length > 4 &&
+    userName.value.length > 4
+  ) {
+    person = {
+      user: userName.value,
+      email: userEmail.value,
+      password: userPassword.value,
+    };
+
+    users.push(person);
+    recordUser(users);
+    userPassword.value = "";
+    userEmail.value = "";
+    userName.value = "";
+    loginModal.style.opacity = "1";
+    registerModal.style.transform = "translateX(420px)";
+  } else {
+    registerModal.classList.add("error");
+  }
+});
+registerModal.addEventListener("click", (event) => {
+  if (event.target.classList.contains("input")) {
+    registerModal.classList.remove("error");
+  }
 });
 btnLogin.addEventListener("click", (event) => {
+  /* loginModal.classList.add("error"); */
   event.preventDefault();
   const arr = readUser();
   const newArr = arr.filter((item) => item.email === userEmailLogin.value);
+  userGreeting.textContent = arr[0].user;
+  if (newArr.length === 0) {
+    loginModal.classList.add("error");
+  }
   if (
     newArr[0].email === userEmailLogin.value &&
     newArr[0].password === userPasswordLogin.value
   ) {
-    wrapper.style.opacity = "0";
+    wrapper.style.display = "none";
     application.style.display = "block";
     main.style.backgroundImage = 'url("../to-do/image/background.jpg")';
   }

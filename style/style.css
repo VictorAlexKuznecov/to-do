@@ -7,7 +7,7 @@ body {
   line-height: 19px;
 }
 .main {
-  padding-top: 5%;
+  padding: 5%;
   display: flex;
   justify-content: center;
   width: 100%;
@@ -16,15 +16,27 @@ body {
   background-repeat: no-repeat;
   background-position: center;
   background-size: cover;
+  transition: all 0.2s ease-in;
 }
+.dark {
+  /* background-image: url("../image/black-background.jpg"); */
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  transition: all 0.2s ease-in;
+}
+
 .app {
   display: none;
   padding: 45px 20px 20px;
   width: 428px;
-  height: 710px;
+  height: 732px;
   border-radius: 30px;
   background: rgba(255, 253, 244, 0.96);
-  transition: all 1s;
+  transition: all 0.2s ease-in;
+}
+.hidden {
+  display: none;
 }
 .app__description {
   position: relative;
@@ -41,7 +53,7 @@ body {
   height: 100%;
 }
 .app__greetings {
-  transition: all 1s;
+  transition: all 0.2s ease-in;
   margin-bottom: 14px;
 }
 .app__theme {
@@ -50,15 +62,57 @@ body {
   right: 0;
   height: 20px;
   width: 20px;
-  cursor: pointer;
 }
 .img__theme {
+  transition: all 0.2s ease-in;
   max-width: 100%;
   max-height: 100%;
 }
-
+.checkbox__theme {
+  cursor: pointer;
+  position: relative;
+  z-index: 5;
+  opacity: 0;
+  top: 6px;
+  right: 29px;
+  height: 23px;
+  width: 50px;
+}
+.checkbox__theme-custom {
+  position: relative;
+  top: -22px;
+  right: 30px;
+  display: block;
+  width: 50px;
+  height: 26px;
+  background-color: #ffffff;
+  border-radius: 18px;
+  border: 1px solid rgba(0, 0, 0, 0.4);
+  transition: all 0.2s ease-in;
+}
+.checkbox__theme-custom::before {
+  content: "";
+  position: absolute;
+  left: 2px;
+  top: 2px;
+  width: 20px;
+  height: 20px;
+  border-radius: 15px;
+  background-color: #dfbd43;
+  transition: all 0.2s ease-in;
+}
+.checkbox__theme:checked + .checkbox__theme-custom::before {
+  left: 27px;
+  background-color: rgb(33, 207, 27);
+}
 .app__body {
   position: relative;
+  margin-bottom: 10px;
+}
+.text-message-incorrect {
+  display: none;
+  color: red;
+  text-align: center;
   margin-bottom: 15px;
 }
 .app__search {
@@ -161,9 +215,7 @@ body {
 }
 .app__item {
   position: relative;
-  display: flex;
-  flex-direction: column;
-  row-gap: 6px;
+
   padding: 10px 27px 10px 48px;
   width: 100%;
   min-height: 72px;
@@ -175,12 +227,50 @@ body {
 .item__checkbox {
   cursor: pointer;
   position: absolute;
+  z-index: 3;
+  opacity: 0;
+  width: 18px;
+  height: 18px;
   left: 19px;
   top: 50%;
   transform: translateY(-50%);
 }
+.item__checkbox:checked ~ .item__checkbox-custom::before {
+  transform: translate(-50%, -50%) scale(1);
+  transition: all 0.2s ease-in;
+}
+.item__checkbox-custom {
+  position: relative;
+  left: -30px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  background-color: #dfbd43;
+  border-radius: 4px;
+}
+.item__checkbox-custom::before {
+  content: "";
+  width: 10px;
+  height: 10px;
+  background: url("../image/check.svg");
+  background-repeat: no-repeat;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0);
+  transition: all 0.3s ease-in;
+}
+.item__content {
+  display: flex;
+  flex-direction: column;
+  row-gap: 6px;
+  margin-top: -20px;
+  margin-left: 10px;
+}
 .item__text {
-  transition: all 1s;
+  transition: all 0.3s ease-in;
   color: rgba(0, 0, 0, 0.5);
   font-weight: 600;
 }
@@ -191,46 +281,69 @@ body {
   border: 2px solid rgb(33, 207, 27);
 }
 .item__date {
-  transition: all 1s;
+  transition: all 0.3s ease-in;
   font-size: 13px;
   color: rgba(0, 0, 0, 0.5);
+}
+.item__editing {
+  cursor: pointer;
+  position: absolute;
+  right: 10px;
+  top: 30%;
+  transform: translateY(-50%);
+}
+.app__buttons-edit {
+  display: none;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  right: 50px;
+}
+.button__edit {
+  background: rgb(39, 175, 175);
+  border-radius: 10px;
+  color: rgb(255, 255, 255);
+  padding: 5px;
+  font-size: 16px;
+  line-height: 19px;
+}
+.button-save {
+}
+.button-cancel {
 }
 .item__delete {
   cursor: pointer;
   position: absolute;
-  right: 10px;
-  top: 50%;
+  right: 20px;
+  top: 70%;
   transform: translateY(-50%);
 }
-.dark {
-  transition: all 1s;
-  background: rgba(0, 0, 0, 0.96);
-}
+
 .dark .app__greetings {
-  transition: all 1s;
+  transition: all 0.2s ease-in;
   color: #ffffff;
 }
 .dark .app__title {
-  transition: all 1s;
+  transition: all 0.2s ease-in;
   color: #ffffff;
 }
 .dark .item__text {
-  transition: all 1s;
+  transition: all 0.2s ease-in;
   color: #ffffff;
 }
 .dark .item__date {
-  transition: all 1s;
+  transition: all 0.2s ease-in;
   color: #ffffff;
 }
 .dark .description__notes {
-  transition: all 1s;
+  transition: all 0.2s ease-in;
   color: #ffffff;
 }
 
 .wrapper {
   position: relative;
   width: 400px;
-  height: 440px;
+  height: 450px;
   background: transparent;
   border: 2px solid rgba(255, 255, 255, 0.5);
   border-radius: 20px;
@@ -286,7 +399,7 @@ body {
   position: relative;
   width: 100%;
   height: 50px;
-  margin: 30px 0;
+  margin: 33px 0;
 }
 .label {
   position: absolute;
@@ -298,6 +411,28 @@ body {
   font-weight: 500;
   pointer-events: none;
   transition: 0.5s;
+}
+.login-error {
+  display: none;
+}
+.user-text,
+.email-text {
+  opacity: 0;
+}
+.error .login-error {
+  display: block;
+  margin: 10px 0;
+  font-size: 12px;
+  color: red;
+  font-weight: 500;
+}
+.error .email-text,
+.error .user-text {
+  opacity: 1;
+  margin-top: 5px;
+  font-size: 14px;
+  color: red;
+  font-weight: 600;
 }
 .label-email {
 }
@@ -323,7 +458,7 @@ body {
 
 .input-box input:focus ~ label,
 .input-box input:valid ~ label {
-  top: -5px;
+  top: 0px;
 }
 .icon {
   background-repeat: no-repeat;
@@ -365,7 +500,7 @@ body {
   font-size: 12px;
   color: #162938;
   font-weight: 500;
-  margin: -15px 0 15px;
+  margin: 0px 0 15px;
   display: flex;
   justify-content: space-between;
 }
@@ -393,8 +528,14 @@ body {
   cursor: pointer;
   font-size: 12px;
   color: #ffffff;
-  font-weight: 500;
+  font-weight: 600;
+  transition: all ease 0.3s;
 }
+.btn:hover {
+  background-color: #557d9b;
+  color: #162938;
+}
+
 .login-register {
   font-size: 14px;
   color: #162938;

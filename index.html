@@ -28,11 +28,15 @@
       <div class="app">
         <div class="app__description">
           <div class="app__img">
-            <img class="image" src="./image/Ellipse 9.jpeg" alt="#" />
+            <img class="image" src="./image/avatar.jpg" alt="#" />
           </div>
-          <p class="app__greetings">Good evening, Ivy</p>
+          <p class="app__greetings">
+            Good evening, <span class="user-name">Ivy</span>
+          </p>
           <div class="app__theme">
             <img class="img__theme" src="./image/theme/moon.png" alt="#" />
+            <input class="checkbox__theme" type="checkbox" />
+            <span class="checkbox__theme-custom"></span>
           </div>
         </div>
         <div class="app__body">
@@ -50,7 +54,17 @@
           <button class="app__add-button" type="button">
             <img class="app__add-svg" src="./image/add.svg" alt="add-button" />
           </button>
+          <div class="app__buttons-edit">
+            <button class="button__edit button-save" type="button">Save</button>
+            <button class="button__edit button-cancel" type="button">
+              Cancel
+            </button>
+          </div>
         </div>
+        <p class="text-message-incorrect">
+          Enter at least 4 characters or digits.
+        </p>
+
         <div class="app__buttons buttons">
           <button class="button__delete-all button-controls" type="button">
             Delete All
@@ -97,6 +111,9 @@
                 required
               />
               <label class="label label-password">Password</label>
+              <p class="login-error">
+                Incorrect login or password. Please try again.
+              </p>
             </div>
             <div class="remember">
               <label class="remember__label">
@@ -120,11 +137,13 @@
               <span class="icon icon-user"></span>
               <input class="input input-user" type="text" required />
               <label class="label label-user">Username</label>
+              <p class="user-text">The name is invalid.</p>
             </div>
             <div class="input-box">
               <span class="icon icon-email"></span>
               <input class="input input-email-register" type="text" required />
               <label class="label label-email">Email</label>
+              <p class="email-text">Email must contain "@"</p>
             </div>
             <div class="input-box">
               <span class="icon icon-eye-register"></span>
