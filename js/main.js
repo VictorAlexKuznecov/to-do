@@ -22,6 +22,8 @@ const add = document.body.querySelector(".app__add-button"),
 
 let currentTime, taskDeadline, editingNumber;
 let toDo = [];
+/* -----------------test----------------- */
+
 function setDate(arr) {
   localStorage.setItem("todos", JSON.stringify(arr));
 }
@@ -172,7 +174,7 @@ list.addEventListener("click", (event) => {
     editButtons.style.display = "block";
   }
 });
-/* ----------------------- dragDrop---------------------------------- */
+/* ----------------------- dragandDrop---------------------------------- */
 list.addEventListener("mousedown", () => {
   const items = document.querySelectorAll(".app__item");
   let dragStartIndex;
@@ -345,7 +347,6 @@ registerModal.addEventListener("click", (event) => {
   }
 });
 btnLogin.addEventListener("click", (event) => {
-  /* loginModal.classList.add("error"); */
   event.preventDefault();
   const arr = readUser();
   const newArr = arr.filter((item) => item.email === userEmailLogin.value);
